@@ -1,7 +1,8 @@
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const app = require('./app');
 
 dotenv.config({ path: './config.env' });
+const app = require('./app');
 
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
@@ -9,13 +10,12 @@ const DB = process.env.DATABASE.replace(
 );
 
 mongoose
-  .connect(DB)
-  .then(() => {
-    console.log('DB connection successful!');
+  .connect(DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
   })
-  .catch(err => {
-    console.error('DB connection error:', err);
-  });
+  .then(() => console.log('DB connection successful!'));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
